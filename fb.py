@@ -21,22 +21,14 @@ def human_like_scroll(driver):
 def log_message(message):
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {message}")
 
-# List of profile URLs to visit
-profile_urls = [
-    'https://www.facebook.com/mg.yo.374',
-    'https://www.facebook.com/profile.php?id=61556074164195',
-    
-    # Add more profile URLs as needed
-]
-
 # Initialize Firefox WebDriver
 driver = webdriver.Firefox()
 
-try:
-    # Open Facebook login page
-    driver.get('https://www.facebook.com/')
-    log_message("Navigated to Facebook login page")
+# Open Facebook login page
+driver.get('https://www.facebook.com/')
+log_message("Navigated to Facebook login page")
 
+try:
     # Wait for the email input field to be visible
     email_input = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.ID, 'email'))
@@ -79,27 +71,33 @@ try:
     )
     log_message("Home page loaded")
 
-    # Loop through each profile URL
-    for profile_url in profile_urls:
-        log_message(f"Navigating to profile URL: {profile_url}")
-        driver.get(profile_url)
+    # Directly navigate to the profile URL
+    profile_url = 'https://www.facebook.com/mg.yo.374'
+    log_message(f"Directly navigating to profile URL: {profile_url}")
+    driver.get(profile_url)
 
-        # Wait for the profile page to load
-        time.sleep(3 + random.random() * 2)  # Simulate human-like wait time
+    # Wait for the profile page to load
+    time.sleep(5)  # Adjust as necessary
 
-        # Simulate scrolling on the profile page
-        human_like_scroll(driver)
+    # Simulate liking a post (find a post and click the like button)
+    # try:
+    #     posts = WebDriverWait(driver, 20).until(
+    #         EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "userContentWrapper")]'))
+    #     )
+    #     log_message(f"Found {len(posts)} posts on the profile page")
 
-        # Simulate clicking on the "Add Friend" button
-        try:
-            add_friend_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, '//div[@aria-label="Add friend"]'))
-            )
-            add_friend_button.click()
-            log_message("Clicked on Add Friend button")
-            time.sleep(2 + random.random() * 2)  # Simulate human-like wait after clicking
-        except Exception as e:
-            log_message(f"Exception while clicking on Add Friend button: {e}")
+    #     # Randomly select a post to interact with
+    #     post_to_like = random.choice(posts)
+    #     like_button = post_to_like.find_element(By.XPATH, './/span[contains(@class, "pcp91wgn")]')
+
+    #     # Scroll to the post and like it
+    #     driver.execute_script("arguments[0].scrollIntoView(true);", post_to_like)
+    #     time.sleep(1.5 + 0.5 * random.random())  # Simulating human delay before interaction
+    #     like_button.click()
+    #     log_message("Liked a post on the profile page")
+
+    # except Exception as e:
+    #     log_message(f"Exception occurred while liking a post: {e}")
 
 except Exception as e:
     log_message(f"Exception occurred: {e}")
